@@ -1,24 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useState, useEffect } from 'react';
 import './App.css';
 
+const NUM_ANIMATION_STAGES = 4
+const ANIMATION_STAGE_DURATION_MS = 1000
+
 function App() {
+  const [animationStage, setAnimationStage] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAnimationStage(stage => (stage + 1) % NUM_ANIMATION_STAGES)
+    }, ANIMATION_STAGE_DURATION_MS)
+
+    return () => clearInterval(interval)
+  }, [])
+
+  const fill = (isOn: boolean) => isOn ? 'red' : 'black'
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <svg viewBox="0 0 100 100">
+        <g fill={fill(animationStage >= 1)}>
+          <rect x="0" y="0" width="10" height="100" />
+          <rect x="15" y="0" width="10" height="100" />
+        </g>
+
+        <g fill={fill(animationStage >= 2)}>
+          <rect x="30" y="0" width="10" height="100" />
+          <rect x="45" y="0" width="10" height="100" />
+        </g>
+
+        <g fill={fill(animationStage >= 3)}>
+          <rect x="60" y="0" width="10" height="100" />
+          <rect x="75" y="0" width="10" height="100" />
+        </g>
+      </svg>
     </div>
   );
 }
